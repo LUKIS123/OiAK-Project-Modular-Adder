@@ -1,7 +1,7 @@
 import BinaryArithmeticUtils as Binary
 
 
-class HashedEnvelopedCellCombo:
+class HashedEnvelopedCombo:
     # hashed cell output
     gi_or_bi1_ifk0 = None
     ai_ifk1 = None
