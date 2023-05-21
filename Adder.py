@@ -25,7 +25,7 @@ class Adder:
         self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, n_bits)
         self.input_b_list = BinaryArithmeticUtils.get_binary_list_from_int(input_b, n_bits)
         self.input_k_list = BinaryArithmeticUtils.get_binary_list_from_int(input_k, n_bits)
-        self.c_out = BinaryArithmeticUtils.calculate_c_out(input_a, input_b, n_bits)
+        # self.c_out = BinaryArithmeticUtils.calculate_c_out(input_a, input_b, n_bits)
 
     def calculate(self):
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
@@ -181,11 +181,14 @@ class Adder:
                     level2_cell_indicator -= 1
         # koniec fazy parallel prefix adder
 
+        # zrobione dla n=7 bitow
+        # TODO: here
+
+        self.c_out = self.parallel_adders_list[2][0].gi2_out
+
         bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
             self.n_hashed_enveloped_cell_list[6].hi_prim
 
-        # zrobione dla n=7 bitow
-        # TODO: carry 1 --- to samo tylko ze z primami
         bit1 = self.n_hashed_enveloped_cell_list[6].gi_or_bi1_ifk0 ^ self.n_hashed_enveloped_cell_list[5].hi_or_ai_ifk0
         bit2 = self.parallel_adders_list[0][2].gi_out ^ self.n_hashed_enveloped_cell_list[4].hi_or_ai_ifk0
         bit3 = self.parallel_adders_list[1][2].gi_out ^ self.n_hashed_enveloped_cell_list[3].hi_or_ai_ifk0
