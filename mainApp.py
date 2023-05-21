@@ -2,18 +2,18 @@ from ModuloCells import HashedEnvelopedCombo
 from Adder import Adder
 import BinaryArithmeticUtils
 
-m = HashedEnvelopedCombo()
-m.generate_hashed_cell_output(1, 1)
-print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
-m.generate_hashed_cell_output(1, 0)
-print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
-m.generate_hashed_cell_output(0, 1)
-print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
-m.generate_hashed_cell_output(0, 0)
-print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
-
-print(BinaryArithmeticUtils.get_int_from_binary([1, 1, 1]))
-print(BinaryArithmeticUtils.get_binary_list_from_int(32, 7))
+# m = HashedEnvelopedCombo()
+# m.generate_hashed_cell_output(1, 1)
+# print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
+# m.generate_hashed_cell_output(1, 0)
+# print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
+# m.generate_hashed_cell_output(0, 1)
+# print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
+# m.generate_hashed_cell_output(0, 0)
+# print(f"g:: {m.gi_or_bi1_ifk0}  a:: {m.ai_ifk1}  h:: {m.hi_or_ai_ifk0}  p:: {m.pi_or_bi1_ifk1}")
+#
+# print(BinaryArithmeticUtils.get_int_from_binary([1, 1, 1]))
+# print(BinaryArithmeticUtils.get_binary_list_from_int(32, 7))
 
 # UWAGA ->>> modulo 2^n - K
 # n=7
@@ -33,14 +33,10 @@ print(BinaryArithmeticUtils.get_binary_list_from_int(32, 7))
 n_bits = 7
 input_a = 70
 input_b = 13
-input_k = 31
+# input_k = 31
+input_k = 55
 
 adder = Adder(n_bits, input_a, input_b, input_k)
 adder.calculate()
 
-j = 6
-while (j >= 0):
-    print(j)
-    j -= 1
-
-
+# print(BinaryArithmeticUtils.calculate_c_out(input_a, input_b, n_bits))
