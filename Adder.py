@@ -48,6 +48,7 @@ class Adder:
             cell = self.n_hashed_enveloped_cell_list[i]
 
             cell.generate_hashed_cell_output(a_i, b_i)
+
             if i == self.n_bits - 1:
                 if k_i == 0:
                     cell.generate_enveloped_cell_output(0, cell.hi_or_ai_ifk0)
@@ -55,9 +56,19 @@ class Adder:
                     cell.generate_enveloped_cell_output(0, cell.ai_ifk1)
             else:
                 if k_i == 0:
-                    cell.generate_enveloped_cell_output(cell.gi_or_bi1_ifk0, cell.hi_or_ai_ifk0)
+                    if self.input_k_list[i + 1] == 0:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i + 1].gi_or_bi1_ifk0,
+                                                            cell.hi_or_ai_ifk0)
+                    else:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i + 1].pi_or_bi1_ifk1,
+                                                            cell.hi_or_ai_ifk0)
                 else:
-                    cell.generate_enveloped_cell_output(cell.pi_or_bi1_ifk1, cell.ai_ifk1)
+                    if self.input_k_list[i + 1] == 0:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i + 1].gi_or_bi1_ifk0,
+                                                            cell.ai_ifk1)
+                    else:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i + 1].pi_or_bi1_ifk1,
+                                                            cell.ai_ifk1)
 
         # faza obliczen parallel prefix adder
         level0_index = self.n_bits - 1
@@ -179,11 +190,11 @@ class Adder:
                     level2_level1_parallel_index -= 1
                     level2_index -= 8
                     level2_cell_indicator -= 1
+
         # koniec fazy parallel prefix adder
 
         # zrobione dla n=7 bitow
         # TODO: here
-
         self.c_out = self.parallel_adders_list[2][0].gi2_out
 
         bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
@@ -204,8 +215,8 @@ class Adder:
         bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
 
         print(f"K: {self.input_k_list}")
-        print(f"carry = {self.c_out}")
-        print("WYNIK - carry 0 :")
+        print(f"carry = {self.c_out}\n")
+        print("WYNIK dla carry 0 :")
         print(f"{bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0}")
-        print("WYNIK - carry 1 :")
+        print("WYNIK dla carry 1 :")
         print(f"{bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0}")
