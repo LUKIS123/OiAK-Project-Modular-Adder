@@ -232,7 +232,7 @@ class Adder:
         print(f"Vector A: {self.input_a_list}")
         print(f"Vector B: {self.input_b_list}")
         print(f"Vector K: {self.input_k_list}")
-        print(f"Carry = {self.c_out}\n")
+        print(f"\nCarry = {self.c_out}\n")
         print("Output for Carry = 0:")
         print(
             f"[ {bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ] => "

@@ -36,14 +36,14 @@ from Adder import Adder
 # input_b = 50
 # input_k = 55
 
+# Enter A: 69
+# Enter B: 45
+# Enter K: 20
+
 # NIE DZIALA...
 # input_a = 69
 # input_b = 69
 # input_k = 10
-
-# Enter A: 69
-# Enter B: 45
-# Enter K: 20
 
 while True:
     n_bits = 7
