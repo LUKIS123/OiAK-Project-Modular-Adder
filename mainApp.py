@@ -7,6 +7,7 @@ import BinaryArithmeticUtils
 # A+B <=127
 # modulo = 2**n-K = 128 - K
 # 3 <= K <= 2**(n-1) -1 = 63
+
 # S = (A+B) modulo
 # S = A+B           if A+B < modulo
 # S = A+B - modulo  if A + B >= modulo
@@ -14,7 +15,7 @@ import BinaryArithmeticUtils
 # S = A+B           if cout =0
 #     A+B + K       if cout =0
 # cout out carry z A+B+K
-# cout == A+B+K and 128 binarnie
+# cout == A+B+K and 128 binarnie dla n=7
 
 # m = HashedEnvelopedCombo()
 # m.generate_hashed_cell_output(1, 1)
@@ -29,12 +30,13 @@ import BinaryArithmeticUtils
 # print(BinaryArithmeticUtils.get_int_from_binary([1, 1, 1]))
 # print(BinaryArithmeticUtils.get_binary_list_from_int(32, 7))
 
-# ======= test =======
+# ======= test dla n=7 =======
+# UWAGA! -> k_max = 63
 n_bits = 7
 input_a = 70
-input_b = 13
-# input_k = 31
-input_k = 63
+input_b = 20
+input_k = 31
+# input_k = 63
 
 adder = Adder(n_bits, input_a, input_b, input_k)
 adder.calculate()

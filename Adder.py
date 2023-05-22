@@ -185,7 +185,7 @@ class Adder:
 
                     if cell4 is not None:
                         pass
-                        # tutaj bedzie lell nr 4
+                        # tutaj bedzie cell nr 4
 
                     level2_level1_parallel_index -= 1
                     level2_index -= 8
@@ -195,6 +195,7 @@ class Adder:
 
         # zrobione dla n=7 bitow
         # TODO: here
+
         self.c_out = self.parallel_adders_list[2][0].gi2_out
 
         bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
@@ -215,7 +216,7 @@ class Adder:
         bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
 
         print(f"K: {self.input_k_list}")
-        print(f"carry = {self.c_out}\n")
+        print(f"\n>> carry = {self.c_out}\n")
         print("WYNIK dla carry 0 :")
         print(f"{bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0}")
         print("WYNIK dla carry 1 :")
