@@ -25,7 +25,6 @@ class Adder:
         self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, n_bits)
         self.input_b_list = BinaryArithmeticUtils.get_binary_list_from_int(input_b, n_bits)
         self.input_k_list = BinaryArithmeticUtils.get_binary_list_from_int(input_k, n_bits)
-        # self.c_out = BinaryArithmeticUtils.calculate_c_out(input_a, input_b, n_bits)
 
     def calculate(self):
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
@@ -78,18 +77,18 @@ class Adder:
         level1_parallel_index = len(self.parallel_adders_list[0]) - 1
         level1_cell_indicator = len(self.parallel_adders_list[1]) - 1
 
-        level2_parallel_index = len(self.parallel_adders_list[1]) - 1
         level2_cell_indicator = len(self.parallel_adders_list[2]) - 1
         level2_level1_parallel_index = len(self.parallel_adders_list[1]) - 2
         level2_level0_parallel_index = len(self.parallel_adders_list[0]) - 3
 
         for level in range(self.stages):
-            parallel_prefix_stage_indicator = 2 ** level
-            parallel_prefix_stage_window = 2 ** (level + 1)
-            parallel_prefix_stage_cluster = 2 ** level
+            # parallel_prefix_stage_indicator = 2 ** level
+            # parallel_prefix_stage_window = 2 ** (level + 1)
+            # parallel_prefix_stage_cluster = 2 ** level
 
             for j in range(len(self.parallel_adders_list[level]) - 1, -1, -1):
                 if level == 0 and level0_index > 0:
+
                     cell = self.parallel_adders_list[level][j]
                     cell.generate_output1(self.n_hashed_enveloped_cell_list[level0_index - 1].gi_or_bi1_ifk0,
                                           self.n_hashed_enveloped_cell_list[level0_index].gi_or_bi1_ifk0,
@@ -103,6 +102,7 @@ class Adder:
                                           )
                     level0_index -= 2
                 elif level == 1 and level1_index >= 0 and level1_parallel_index >= 0:
+
                     cell1 = self.parallel_adders_list[level][level1_cell_indicator]
                     level1_cell_indicator -= 1
                     cell2 = self.parallel_adders_list[level][level1_cell_indicator]
@@ -131,12 +131,13 @@ class Adder:
                     level1_index -= 4
                     level1_parallel_index -= 2
                     level1_cell_indicator -= 1
-                elif level == 2 and level2_index >= 0 and level2_parallel_index >= 0 \
-                        and level2_level1_parallel_index >= 0:
+                elif level == 2 and level2_index >= 0 and level2_level1_parallel_index >= 0:
+
                     cell1 = self.parallel_adders_list[level][level2_cell_indicator]
                     cell2 = None
                     cell3 = None
                     cell4 = None
+
                     if level2_cell_indicator > 0:
                         level2_cell_indicator -= 1
                         cell2 = self.parallel_adders_list[level][level2_cell_indicator]
@@ -170,8 +171,6 @@ class Adder:
                                                self.parallel_adders_list[1][level2_level1_parallel_index + 1].pi2_out
                                                )
                     if cell3 is not None:
-                        t1 = self.parallel_adders_list[1][level2_level1_parallel_index].gi_out
-                        t2 = self.parallel_adders_list[1][level2_level1_parallel_index].pi_out
                         cell3.generate_output1(self.parallel_adders_list[1][level2_level1_parallel_index].gi_out,
                                                self.parallel_adders_list[1][level2_level1_parallel_index + 2].gi_out,
                                                self.parallel_adders_list[1][level2_level1_parallel_index].pi_out,
@@ -215,9 +214,15 @@ class Adder:
         bit5c = self.parallel_adders_list[2][2].gi2_out ^ self.n_hashed_enveloped_cell_list[1].hi_prim
         bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
 
+        print(f"A: {self.input_a_list}")
+        print(f"B: {self.input_b_list}")
         print(f"K: {self.input_k_list}")
         print(f"\n>> carry = {self.c_out}\n")
         print("WYNIK dla carry 0 :")
-        print(f"{bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0}")
+        print(
+            f"{bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ==> "
+            f"{BinaryArithmeticUtils.get_int_from_binary([bit6, bit5, bit4, bit3, bit2, bit1, bit0])}")
         print("WYNIK dla carry 1 :")
-        print(f"{bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0}")
+        print(
+            f"{bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ==> "
+            f"{BinaryArithmeticUtils.get_int_from_binary([bit6c, bit5c, bit4c, bit3c, bit2c, bit1c, bit0])}")
