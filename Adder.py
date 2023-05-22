@@ -18,15 +18,16 @@ class Adder:
     c_out = 0
     parallel_adders_stage_output = []
 
-    def __init__(self, n_bits, input_a, input_b, input_k):
+    def __init__(self, n_bits):
         self.stages = int(n_bits / 2)
         self.parallel_adders_count = self.stages
         self.n_bits = n_bits
-        self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, n_bits)
-        self.input_b_list = BinaryArithmeticUtils.get_binary_list_from_int(input_b, n_bits)
-        self.input_k_list = BinaryArithmeticUtils.get_binary_list_from_int(input_k, n_bits)
 
-    def calculate(self):
+    def calculate(self, input_a, input_b, input_k):
+        self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, self.n_bits)
+        self.input_b_list = BinaryArithmeticUtils.get_binary_list_from_int(input_b, self.n_bits)
+        self.input_k_list = BinaryArithmeticUtils.get_binary_list_from_int(input_k, self.n_bits)
+
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):
             self.n_hashed_enveloped_cell_list.append(HashedEnvelopedCombo())
@@ -74,11 +75,14 @@ class Adder:
         level1_index = self.n_bits - 3
         level2_index = self.n_bits - 5
 
+        # indeksy pomocnicze dla stage 2
         level1_parallel_index = len(self.parallel_adders_list[0]) - 1
         level1_cell_indicator = len(self.parallel_adders_list[1]) - 1
 
+        # indeksy pomocnicze dla stage 3
         level2_cell_indicator = len(self.parallel_adders_list[2]) - 1
-        level2_level1_parallel_index = len(self.parallel_adders_list[1]) - 2
+        level2_level1_parallel_index12 = len(self.parallel_adders_list[1]) - 2
+        level2_level1_parallel_index34 = len(self.parallel_adders_list[1]) - 3
         level2_level0_parallel_index = len(self.parallel_adders_list[0]) - 3
 
         for level in range(self.stages):
@@ -131,7 +135,7 @@ class Adder:
                     level1_index -= 4
                     level1_parallel_index -= 2
                     level1_cell_indicator -= 1
-                elif level == 2 and level2_index >= 0 and level2_level1_parallel_index >= 0:
+                elif level == 2 and level2_index >= 0 and level2_level1_parallel_index12 >= 0:
 
                     cell1 = self.parallel_adders_list[level][level2_cell_indicator]
                     cell2 = None
@@ -149,51 +153,62 @@ class Adder:
                         cell4 = self.parallel_adders_list[level][level2_cell_indicator]
 
                     cell1.generate_output1(self.n_hashed_enveloped_cell_list[level2_index].gi_or_bi1_ifk0,
-                                           self.parallel_adders_list[1][level2_level1_parallel_index].gi_out,
+                                           self.parallel_adders_list[1][level2_level1_parallel_index12].gi_out,
                                            self.n_hashed_enveloped_cell_list[level2_index].pi_or_bi1_ifk1,
-                                           self.parallel_adders_list[1][level2_level1_parallel_index].pi_out
+                                           self.parallel_adders_list[1][level2_level1_parallel_index12].pi_out
                                            )
                     cell1.generate_output2(self.n_hashed_enveloped_cell_list[level2_index].gi_prim,
-                                           self.parallel_adders_list[1][level2_level1_parallel_index].gi2_out,
+                                           self.parallel_adders_list[1][level2_level1_parallel_index12].gi2_out,
                                            self.n_hashed_enveloped_cell_list[level2_index].pi_prim,
-                                           self.parallel_adders_list[1][level2_level1_parallel_index].pi2_out
+                                           self.parallel_adders_list[1][level2_level1_parallel_index12].pi2_out
                                            )
                     if cell2 is not None:
-                        level2_level1_parallel_index -= 1
+                        level2_level1_parallel_index12 -= 1
                         cell2.generate_output1(self.parallel_adders_list[0][level2_level0_parallel_index].gi_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 1].gi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 1].gi_out,
                                                self.parallel_adders_list[0][level2_level0_parallel_index].pi_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 1].pi_out
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 1].pi_out
                                                )
                         cell2.generate_output2(self.parallel_adders_list[0][level2_level0_parallel_index].gi2_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 1].gi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 1].gi2_out,
                                                self.parallel_adders_list[0][level2_level0_parallel_index].pi2_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 1].pi2_out
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 1].pi2_out
                                                )
                     if cell3 is not None:
-                        cell3.generate_output1(self.parallel_adders_list[1][level2_level1_parallel_index].gi_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 2].gi_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index].pi_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 2].pi_out
+                        level2_level1_parallel_index12 -= 1
+                        cell3.generate_output1(self.parallel_adders_list[1][level2_level1_parallel_index34].gi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 2].gi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index34].pi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 2].pi_out
                                                )
-                        cell3.generate_output2(self.parallel_adders_list[0][level2_level1_parallel_index].gi2_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 2].gi2_out,
-                                               self.parallel_adders_list[0][level2_level1_parallel_index].pi2_out,
-                                               self.parallel_adders_list[1][level2_level1_parallel_index + 2].pi2_out
+                        cell3.generate_output2(self.parallel_adders_list[1][level2_level1_parallel_index34].gi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 2].gi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index34].pi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 2].pi2_out
                                                )
 
                     if cell4 is not None:
-                        pass
-                        # tutaj bedzie cell nr 4
-
-                    level2_level1_parallel_index -= 1
+                        level2_level1_parallel_index12 -= 1
+                        level2_level1_parallel_index34 -= 1
+                        cell4.generate_output1(self.parallel_adders_list[1][level2_level1_parallel_index34].gi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 3].gi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index34].pi_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 3].pi_out
+                                               )
+                        cell4.generate_output2(self.parallel_adders_list[1][level2_level1_parallel_index34].gi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 3].gi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index34].pi2_out,
+                                               self.parallel_adders_list[1][level2_level1_parallel_index12 + 3].pi2_out
+                                               )
+                    level2_level1_parallel_index12 -= 1
+                    level2_level1_parallel_index34 -= 1
                     level2_index -= 8
                     level2_cell_indicator -= 1
 
         # koniec fazy parallel prefix adder
 
         # zrobione dla n=7 bitow
-        # TODO: here
+        # TODO: n <= 8
 
         self.c_out = self.parallel_adders_list[2][0].gi2_out
 
@@ -214,15 +229,15 @@ class Adder:
         bit5c = self.parallel_adders_list[2][2].gi2_out ^ self.n_hashed_enveloped_cell_list[1].hi_prim
         bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
 
-        print(f"A: {self.input_a_list}")
-        print(f"B: {self.input_b_list}")
-        print(f"K: {self.input_k_list}")
-        print(f"\n>> carry = {self.c_out}\n")
-        print("WYNIK dla carry 0 :")
+        print(f"Vector A: {self.input_a_list}")
+        print(f"Vector B: {self.input_b_list}")
+        print(f"Vector K: {self.input_k_list}")
+        print(f"Carry = {self.c_out}\n")
+        print("Output for Carry = 0:")
         print(
-            f"{bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ==> "
+            f"[ {bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ] => "
             f"{BinaryArithmeticUtils.get_int_from_binary([bit6, bit5, bit4, bit3, bit2, bit1, bit0])}")
-        print("WYNIK dla carry 1 :")
+        print("Output for carry = 1:")
         print(
-            f"{bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ==> "
+            f"[ {bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ] => "
             f"{BinaryArithmeticUtils.get_int_from_binary([bit6c, bit5c, bit4c, bit3c, bit2c, bit1c, bit0])}")
