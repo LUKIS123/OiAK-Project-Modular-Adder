@@ -1,4 +1,4 @@
-import BinaryArithmeticUtils as Binary
+from Utils import BinaryArithmeticUtils as Binary
 
 
 class HashedEnvelopedCombo:

@@ -1,6 +1,6 @@
-from ModuloCells import HashedEnvelopedCombo
-from ParallelPrefixCells import Parallel
-import BinaryArithmeticUtils
+from Cells.ModuloCellCombo import HashedEnvelopedCombo
+from Cells.ParallelPrefixCellCombo import Parallel
+from Utils import BinaryArithmeticUtils
 
 
 class Adder:

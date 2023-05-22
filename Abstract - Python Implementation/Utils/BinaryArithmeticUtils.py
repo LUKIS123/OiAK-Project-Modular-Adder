@@ -23,7 +23,7 @@ def get_binary_list_from_int(num: int, n_bits):
     return bit_list
 
 
-def calculate_c_out(input_a: int, input_b: int, n_bits: int):
+def calculate_mask(input_a: int, input_b: int, n_bits: int):
     out_list = get_binary_list_from_int(2 ** n_bits, n_bits)
     ab_list = get_binary_list_from_int(input_a + input_b, n_bits)
     if len(out_list) > len(ab_list):
