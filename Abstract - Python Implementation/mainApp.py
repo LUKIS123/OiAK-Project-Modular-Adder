@@ -46,15 +46,17 @@ from Adder import Adder
 # input_k = 10
 
 while True:
-    n_bits = 7
+    n_bits = 8
 
     input_a = int(input("Enter A: "))
     input_b = int(input("Enter B: "))
     input_k = int(input("Enter K: "))
+    print(f"Expected value = {(input_a + input_b) % ((2 ** n_bits) - input_k)}")
 
     adder = Adder(n_bits)
     print("Calculating output...\n")
     adder.calculate(input_a, input_b, input_k)
+    adder.reset(n_bits)
 
     choice = str(input("\nRepeat? [Y/N]: "))
     if choice.lower() == 'n' or choice.lower() == 'no':

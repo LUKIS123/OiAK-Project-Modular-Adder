@@ -1,3 +1,5 @@
+import math
+
 from Cells.ModuloCellCombo import HashedEnvelopedCombo
 from Cells.ParallelPrefixCellCombo import Parallel
 from Utils import BinaryArithmeticUtils
@@ -16,12 +18,22 @@ class Adder:
     parallel_adders_list = []
     # outputs
     c_out = 0
-    parallel_adders_stage_output = []
 
     def __init__(self, n_bits):
-        self.stages = int(n_bits / 2)
-        self.parallel_adders_count = self.stages
+        self.stages = math.ceil(math.log2(n_bits))
+        self.parallel_adders_count = int(n_bits / 2)
         self.n_bits = n_bits
+
+    def reset(self, n_bits):
+        self.stages = math.ceil(math.log2(n_bits))
+        self.parallel_adders_count = int(n_bits / 2)
+        self.n_bits = n_bits
+        self.parallel_adders_list.clear()
+        self.n_hashed_enveloped_cell_list.clear()
+        self.parallel_adders_count = 0
+        self.input_a_list = None
+        self.input_b_list = None
+        self.input_k_list = None
 
     def calculate(self, input_a, input_b, input_k):
         self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, self.n_bits)
@@ -31,7 +43,6 @@ class Adder:
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):
             self.n_hashed_enveloped_cell_list.append(HashedEnvelopedCombo())
-            self.parallel_adders_stage_output.append(0)
 
         # inicjowanie ukladu sumujacego parralel prefix cells
         for i in range(self.stages):
@@ -208,8 +219,6 @@ class Adder:
         # koniec fazy parallel prefix adder
 
         # zrobione dla n=7 bitow
-        # TODO: n <= 8
-
         self.c_out = self.parallel_adders_list[2][0].gi2_out
 
         bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
@@ -241,3 +250,46 @@ class Adder:
         print(
             f"[ {bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ] => "
             f"{BinaryArithmeticUtils.get_int_from_binary([bit6c, bit5c, bit4c, bit3c, bit2c, bit1c, bit0])}")
+        print("============================================================================================")
+
+        # TODO: n <= 8
+        self.c_out = self.parallel_adders_list[-1][0].gi2_out
+        hashed_cell_index = len(self.n_hashed_enveloped_cell_list) - 2
+        output_list = []
+
+        bit0 = self.n_hashed_enveloped_cell_list[-1].hi_or_ai_ifk0 if self.c_out == 0 else \
+            self.n_hashed_enveloped_cell_list[-1].hi_prim
+        output_list.insert(0, bit0)
+
+        if self.c_out == 0:
+            bit1 = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_or_bi1_ifk0 ^ \
+                   self.n_hashed_enveloped_cell_list[
+                       hashed_cell_index].hi_or_ai_ifk0
+        else:
+            bit1 = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_prim ^ \
+                   self.n_hashed_enveloped_cell_list[
+                       hashed_cell_index].hi_prim
+
+        output_list.insert(0, bit1)
+
+        hashed_cell_index -= 1
+        for i in range(0, self.stages, +1):
+            counter = 0
+            for j in range(2 ** i, -1, -1):
+                if counter == 2 ** i or len(output_list) == self.n_bits:
+                    break
+                try:
+                    if self.c_out == 0:
+                        bit_n = self.parallel_adders_list[i][-(counter + 1)].gi_out ^ \
+                                self.n_hashed_enveloped_cell_list[
+                                    hashed_cell_index].hi_or_ai_ifk0
+                    else:
+                        bit_n = self.parallel_adders_list[i][-(counter + 1)].gi2_out ^ \
+                                self.n_hashed_enveloped_cell_list[hashed_cell_index].hi_prim
+                    output_list.insert(0, bit_n)
+                    hashed_cell_index -= 1
+                    counter += 1
+                except IndexError:
+                    continue
+
+        print(f"{output_list} => {BinaryArithmeticUtils.get_int_from_binary(output_list)}")
