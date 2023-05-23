@@ -2,7 +2,7 @@ import math
 
 from Cells.ModuloCellCombo import HashedEnvelopedCombo
 from Cells.ParallelPrefixCellCombo import Parallel
-from Utils import BinaryArithmeticUtils
+from Utility import BinaryArithmeticUtils
 
 
 class Adder:
