@@ -46,8 +46,11 @@ from Adder import Adder
 # input_k = 10
 
 while True:
-    # TODO: 2 tryby 7 i 8 bit
+    # TODO: do przetestowania tryb 8 bit
     n_bits = 7
+    input_n = int(input("Choose n_bit mode (7 or 8): "))
+    if input_n == 7 or input_n == 8:
+        n_bits = input_n
 
     input_a = int(input("Enter A: "))
     input_b = int(input("Enter B: "))
@@ -55,7 +58,7 @@ while True:
     print(f"Expected value = {(input_a + input_b) % ((2 ** n_bits) - input_k)}")
 
     adder = Adder(n_bits)
-    print("Calculating output...\n")
+    print("Calculating output...")
     adder.calculate(input_a, input_b, input_k)
     adder.reset(n_bits)
 
