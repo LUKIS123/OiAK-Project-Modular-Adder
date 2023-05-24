@@ -217,79 +217,96 @@ class Adder:
                     level2_cell_indicator -= 1
 
         # koniec fazy parallel prefix adder
-
-        # zrobione dla n=7 bitow
-        self.c_out = self.parallel_adders_list[2][0].gi2_out
-
-        bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
-            self.n_hashed_enveloped_cell_list[6].hi_prim
-
-        bit1 = self.n_hashed_enveloped_cell_list[6].gi_or_bi1_ifk0 ^ self.n_hashed_enveloped_cell_list[5].hi_or_ai_ifk0
-        bit2 = self.parallel_adders_list[0][2].gi_out ^ self.n_hashed_enveloped_cell_list[4].hi_or_ai_ifk0
-        bit3 = self.parallel_adders_list[1][2].gi_out ^ self.n_hashed_enveloped_cell_list[3].hi_or_ai_ifk0
-        bit4 = self.parallel_adders_list[1][1].gi_out ^ self.n_hashed_enveloped_cell_list[2].hi_or_ai_ifk0
-        bit5 = self.parallel_adders_list[2][2].gi_out ^ self.n_hashed_enveloped_cell_list[1].hi_or_ai_ifk0
-        bit6 = self.parallel_adders_list[2][1].gi_out ^ self.n_hashed_enveloped_cell_list[0].hi_or_ai_ifk0
-
-        bit1c = self.n_hashed_enveloped_cell_list[6].gi_prim ^ self.n_hashed_enveloped_cell_list[5].hi_prim
-        bit2c = self.parallel_adders_list[0][2].gi2_out ^ self.n_hashed_enveloped_cell_list[4].hi_prim
-        bit3c = self.parallel_adders_list[1][2].gi2_out ^ self.n_hashed_enveloped_cell_list[3].hi_prim
-        bit4c = self.parallel_adders_list[1][1].gi2_out ^ self.n_hashed_enveloped_cell_list[2].hi_prim
-        bit5c = self.parallel_adders_list[2][2].gi2_out ^ self.n_hashed_enveloped_cell_list[1].hi_prim
-        bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
-
         print(f"Vector A: {self.input_a_list}")
         print(f"Vector B: {self.input_b_list}")
         print(f"Vector K: {self.input_k_list}")
-        print(f"\nCarry = {self.c_out}\n")
-        print("Output for Carry = 0:")
-        print(
-            f"[ {bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ] => "
-            f"{BinaryArithmeticUtils.get_int_from_binary([bit6, bit5, bit4, bit3, bit2, bit1, bit0])}")
-        print("Output for carry = 1:")
-        print(
-            f"[ {bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ] => "
-            f"{BinaryArithmeticUtils.get_int_from_binary([bit6c, bit5c, bit4c, bit3c, bit2c, bit1c, bit0])}")
-        print("============================================================================================")
 
-        # TODO: n <= 8
+        # zrobione dla n=7 bitow
+        # self.c_out = self.parallel_adders_list[2][0].gi2_out
+        #
+        # bit0 = self.n_hashed_enveloped_cell_list[6].hi_or_ai_ifk0 if self.c_out == 0 else \
+        #     self.n_hashed_enveloped_cell_list[6].hi_prim
+        #
+        # bit1 = self.n_hashed_enveloped_cell_list[6].gi_or_bi1_ifk0 ^ self.n_hashed_enveloped_cell_list[5].hi_or_ai_ifk0
+        # bit2 = self.parallel_adders_list[0][2].gi_out ^ self.n_hashed_enveloped_cell_list[4].hi_or_ai_ifk0
+        # bit3 = self.parallel_adders_list[1][2].gi_out ^ self.n_hashed_enveloped_cell_list[3].hi_or_ai_ifk0
+        # bit4 = self.parallel_adders_list[1][1].gi_out ^ self.n_hashed_enveloped_cell_list[2].hi_or_ai_ifk0
+        # bit5 = self.parallel_adders_list[2][2].gi_out ^ self.n_hashed_enveloped_cell_list[1].hi_or_ai_ifk0
+        # bit6 = self.parallel_adders_list[2][1].gi_out ^ self.n_hashed_enveloped_cell_list[0].hi_or_ai_ifk0
+        #
+        # bit1c = self.n_hashed_enveloped_cell_list[6].gi_prim ^ self.n_hashed_enveloped_cell_list[5].hi_prim
+        # bit2c = self.parallel_adders_list[0][2].gi2_out ^ self.n_hashed_enveloped_cell_list[4].hi_prim
+        # bit3c = self.parallel_adders_list[1][2].gi2_out ^ self.n_hashed_enveloped_cell_list[3].hi_prim
+        # bit4c = self.parallel_adders_list[1][1].gi2_out ^ self.n_hashed_enveloped_cell_list[2].hi_prim
+        # bit5c = self.parallel_adders_list[2][2].gi2_out ^ self.n_hashed_enveloped_cell_list[1].hi_prim
+        # bit6c = self.parallel_adders_list[2][1].gi2_out ^ self.n_hashed_enveloped_cell_list[0].hi_prim
+        #
+        # print(f"\nCarry = {self.c_out}\n")
+        # print("Output for Carry = 0:")
+        # print(
+        #     f"[ {bit6} {bit5} {bit4} {bit3} {bit2} {bit1} {bit0} ] => "
+        #     f"{BinaryArithmeticUtils.get_int_from_binary([bit6, bit5, bit4, bit3, bit2, bit1, bit0])}")
+        # print("Output for carry = 1:")
+        # print(
+        #     f"[ {bit6c} {bit5c} {bit4c} {bit3c} {bit2c} {bit1c} {bit0} ] => "
+        #     f"{BinaryArithmeticUtils.get_int_from_binary([bit6c, bit5c, bit4c, bit3c, bit2c, bit1c, bit0])}")
+
         self.c_out = self.parallel_adders_list[-1][0].gi2_out
         hashed_cell_index = len(self.n_hashed_enveloped_cell_list) - 2
-        output_list = []
+        carry_output_list = []
+        no_carry_output_list = []
+        final_output_list = []
+
+        no_carry_output_list.insert(0, self.n_hashed_enveloped_cell_list[-1].hi_or_ai_ifk0)
+        carry_output_list.insert(0, self.n_hashed_enveloped_cell_list[-1].hi_prim)
 
         bit0 = self.n_hashed_enveloped_cell_list[-1].hi_or_ai_ifk0 if self.c_out == 0 else \
             self.n_hashed_enveloped_cell_list[-1].hi_prim
-        output_list.insert(0, bit0)
+        final_output_list.insert(0, bit0)
 
+        bit1 = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_or_bi1_ifk0 ^ \
+               self.n_hashed_enveloped_cell_list[
+                   hashed_cell_index].hi_or_ai_ifk0
+        bit1c = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_prim ^ \
+                self.n_hashed_enveloped_cell_list[
+                    hashed_cell_index].hi_prim
         if self.c_out == 0:
-            bit1 = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_or_bi1_ifk0 ^ \
-                   self.n_hashed_enveloped_cell_list[
-                       hashed_cell_index].hi_or_ai_ifk0
+            final_output_list.insert(0, bit1)
         else:
-            bit1 = self.n_hashed_enveloped_cell_list[hashed_cell_index + 1].gi_prim ^ \
-                   self.n_hashed_enveloped_cell_list[
-                       hashed_cell_index].hi_prim
-
-        output_list.insert(0, bit1)
+            final_output_list.insert(0, bit1c)
+        no_carry_output_list.insert(0, bit1)
+        carry_output_list.insert(0, bit1c)
 
         hashed_cell_index -= 1
         for i in range(0, self.stages, +1):
             counter = 0
             for j in range(2 ** i, -1, -1):
-                if counter == 2 ** i or len(output_list) == self.n_bits:
+                if counter == 2 ** i or len(final_output_list) == self.n_bits:
                     break
                 try:
+                    bit_n = self.parallel_adders_list[i][-(counter + 1)].gi_out ^ \
+                            self.n_hashed_enveloped_cell_list[
+                                hashed_cell_index].hi_or_ai_ifk0
+                    bit_c_n = self.parallel_adders_list[i][-(counter + 1)].gi2_out ^ \
+                              self.n_hashed_enveloped_cell_list[hashed_cell_index].hi_prim
+
                     if self.c_out == 0:
-                        bit_n = self.parallel_adders_list[i][-(counter + 1)].gi_out ^ \
-                                self.n_hashed_enveloped_cell_list[
-                                    hashed_cell_index].hi_or_ai_ifk0
+                        final_output_list.insert(0, bit_n)
                     else:
-                        bit_n = self.parallel_adders_list[i][-(counter + 1)].gi2_out ^ \
-                                self.n_hashed_enveloped_cell_list[hashed_cell_index].hi_prim
-                    output_list.insert(0, bit_n)
+                        final_output_list.insert(0, bit_c_n)
+
+                    no_carry_output_list.insert(0, bit_n)
+                    carry_output_list.insert(0, bit_c_n)
                     hashed_cell_index -= 1
                     counter += 1
                 except IndexError:
-                    continue
-
-        print(f"{output_list} => {BinaryArithmeticUtils.get_int_from_binary(output_list)}")
+                    break
+        print("--------------------------------")
+        print("Output for Carry = 0:")
+        print(f"{no_carry_output_list} ==> {BinaryArithmeticUtils.get_int_from_binary(no_carry_output_list)}")
+        print("Output for carry = 1:")
+        print(f"{carry_output_list} ==> {BinaryArithmeticUtils.get_int_from_binary(carry_output_list)}")
+        print(f"\nCarry = {self.c_out}")
+        print("OUTPUT:")
+        print(f"{final_output_list} ==> {BinaryArithmeticUtils.get_int_from_binary(final_output_list)}")
+        print("--------------------------------")

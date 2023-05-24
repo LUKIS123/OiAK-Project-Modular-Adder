@@ -46,6 +46,7 @@ from Adder import Adder
 # input_k = 10
 
 while True:
+    # TODO: 2 tryby 7 i 8 bit
     n_bits = 7
 
     input_a = int(input("Enter A: "))
