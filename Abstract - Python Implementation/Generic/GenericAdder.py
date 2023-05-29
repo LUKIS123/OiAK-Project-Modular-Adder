@@ -48,15 +48,20 @@ class Adder:
             self.n_hashed_enveloped_cell_list.insert(0, HashedEnvelopedCellCombo())
 
         # inicjowanie ukladu sumujacego parralel prefix cells
+        init_counter = 0
         for i in range(self.stages):
             tmp_cells = []
             parallel_prefix_stage_cluster = 2 ** i
-            for j in range(int(self.n_bits / parallel_prefix_stage_cluster)):
+            for j in range(math.ceil(self.n_bits / parallel_prefix_stage_cluster)):
                 for k in range(parallel_prefix_stage_cluster):
+                    if init_counter == self.n_bits:
+                        continue
                     if (j % 2) == 0:
                         tmp_cells.append(DelayCell())
                     else:
                         tmp_cells.append(ParallelPrefixCells())
+                    init_counter += 1
+            init_counter = 0
             self.parallel_adders_list.append(tmp_cells)
 
         # faza obliczen modularnych hashed cells oraz enveloped cells

@@ -17,7 +17,7 @@ from GenericAdder import Adder
 
 while True:
     # wersja generyczna dla n o potegach dwojki
-    n_bits = 8
+    n_bits = 7
 
     input_a = int(input("Enter A: "))
     input_b = int(input("Enter B: "))
