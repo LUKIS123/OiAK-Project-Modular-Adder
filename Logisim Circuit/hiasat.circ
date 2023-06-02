@@ -6,6 +6,10 @@
     <tool name="Pin">
       <a name="appearance" val="classic"/>
     </tool>
+    <tool name="Constant">
+      <a name="facing" val="south"/>
+      <a name="value" val="0x0"/>
+    </tool>
   </lib>
   <lib desc="#Gates" name="1"/>
   <lib desc="#Plexers" name="2"/>
@@ -516,6 +520,14 @@
     <comp lib="0" loc="(1910,990)" name="Tunnel">
       <a name="label" val="dpp012"/>
     </comp>
+    <comp lib="0" loc="(2150,1560)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="gp0123456"/>
+    </comp>
+    <comp lib="0" loc="(2150,1580)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="g0123456"/>
+    </comp>
     <comp lib="0" loc="(2170,1000)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="h3"/>
@@ -574,7 +586,7 @@
     </comp>
     <comp lib="0" loc="(2170,1500)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="gp0123456"/>
+      <a name="label" val="cout"/>
     </comp>
     <comp lib="0" loc="(2170,580)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -623,6 +635,10 @@
     <comp lib="0" loc="(2170,950)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="dgp012"/>
+    </comp>
+    <comp lib="0" loc="(2190,1600)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="bp7"/>
     </comp>
     <comp lib="0" loc="(220,1000)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -707,6 +723,9 @@
     <comp lib="0" loc="(220,860)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="k1"/>
+    </comp>
+    <comp lib="0" loc="(2230,1570)" name="Tunnel">
+      <a name="label" val="cout"/>
     </comp>
     <comp lib="0" loc="(2470,1100)" name="Tunnel">
       <a name="label" val="s4"/>
@@ -1347,6 +1366,7 @@
     <comp lib="1" loc="(2430,680)" name="XOR Gate"/>
     <comp lib="1" loc="(2430,820)" name="XOR Gate"/>
     <comp lib="1" loc="(2430,960)" name="XOR Gate"/>
+    <comp lib="2" loc="(2210,1570)" name="Multiplexer"/>
     <comp lib="2" loc="(2300,1010)" name="Multiplexer"/>
     <comp lib="2" loc="(2300,1080)" name="Multiplexer"/>
     <comp lib="2" loc="(2300,1150)" name="Multiplexer"/>
@@ -1420,6 +1440,8 @@
     <wire from="(1540,760)" to="(1690,760)"/>
     <wire from="(1540,780)" to="(1690,780)"/>
     <wire from="(1540,800)" to="(1690,800)"/>
+    <wire from="(2150,1560)" to="(2180,1560)"/>
+    <wire from="(2150,1580)" to="(2180,1580)"/>
     <wire from="(2170,1000)" to="(2270,1000)"/>
     <wire from="(2170,1020)" to="(2270,1020)"/>
     <wire from="(2170,1070)" to="(2270,1070)"/>
@@ -1447,6 +1469,8 @@
     <wire from="(2170,880)" to="(2270,880)"/>
     <wire from="(2170,930)" to="(2270,930)"/>
     <wire from="(2170,950)" to="(2270,950)"/>
+    <wire from="(2190,1590)" to="(2190,1600)"/>
+    <wire from="(2210,1570)" to="(2230,1570)"/>
     <wire from="(2220,1040)" to="(2220,1110)"/>
     <wire from="(2220,1040)" to="(2280,1040)"/>
     <wire from="(2220,1110)" to="(2220,1180)"/>

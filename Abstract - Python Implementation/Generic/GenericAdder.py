@@ -66,9 +66,9 @@ class Adder:
 
         # faza obliczen modularnych hashed cells oraz enveloped cells
         for i in range(self.n_bits):
-            k_i = self.input_k_list[i]
-            a_i = self.input_a_list[i]
-            b_i = self.input_b_list[i]
+            k_i = self.input_k_list[self.n_bits - (i + 1)]
+            a_i = self.input_a_list[self.n_bits - (i + 1)]
+            b_i = self.input_b_list[self.n_bits - (i + 1)]
             cell = self.n_hashed_enveloped_cell_list[i]
             cell.generate_hashed_cell_output(a_i, b_i)
             if i == 0:
@@ -95,5 +95,62 @@ class Adder:
                         cell.generate_enveloped_cell_output(
                             self.n_hashed_enveloped_cell_list[i - 1].pi_or_bi1_ifk1,
                             cell.ai_ifk1)
+
+        # faza obliczen parallel prefix
+        for level in range(self.stages):
+            parallel_prefix_stage_cluster = 2 ** level
+            counter = 0
+            is_delay_cell = True
+            previous_above_cell_index = (2 ** level) - 1
+            for index in range(len(self.parallel_adders_list[level])):
+                if level == 0:
+                    cell = self.parallel_adders_list[level][index]
+                    if is_delay_cell:
+                        cell.generate_output1(self.n_hashed_enveloped_cell_list[index].pi_or_bi1_ifk1,
+                                              self.n_hashed_enveloped_cell_list[index].gi_or_bi1_ifk0,
+                                              self.n_hashed_enveloped_cell_list[index].pi_prim,
+                                              self.n_hashed_enveloped_cell_list[index].gi_prim)
+                    else:
+                        cell.generate_output1(self.n_hashed_enveloped_cell_list[index].gi_or_bi1_ifk0,
+                                              self.n_hashed_enveloped_cell_list[index - 1].gi_or_bi1_ifk0,
+                                              self.n_hashed_enveloped_cell_list[index].pi_or_bi1_ifk1,
+                                              self.n_hashed_enveloped_cell_list[index - 1].pi_or_bi1_ifk1)
+
+                        cell.generate_output2(self.n_hashed_enveloped_cell_list[index].gi_prim,
+                                              self.n_hashed_enveloped_cell_list[index - 1].gi_prim,
+                                              self.n_hashed_enveloped_cell_list[index].pi_prim,
+                                              self.n_hashed_enveloped_cell_list[index - 1].pi_prim)
+                    counter += 1
+
+                else:
+                    above_cell = self.parallel_adders_list[level - 1][index]
+                    previous_above_cell = self.parallel_adders_list[level - 1][previous_above_cell_index]
+                    if is_delay_cell:
+                        self.parallel_adders_list[level][index].generate_output1(
+                            above_cell.pi_out,
+                            above_cell.gi_out,
+                            above_cell.pi2_out,
+                            above_cell.gi2_out
+                        )
+                    else:
+                        self.parallel_adders_list[level][index].generate_output1(
+                            above_cell.gi_out,
+                            previous_above_cell.gi_out,
+                            above_cell.pi_out,
+                            previous_above_cell.pi_out
+                        )
+                        self.parallel_adders_list[level][index].generate_output2(
+                            above_cell.gi2_out,
+                            previous_above_cell.gi2_out,
+                            above_cell.pi2_out,
+                            previous_above_cell.pi2_out
+                        )
+                        previous_above_cell_index += 2 ** (level - 1)
+
+                    counter += 1
+
+                if counter == parallel_prefix_stage_cluster:
+                    is_delay_cell = not is_delay_cell
+                    counter = 0
 
         print()
