@@ -16,8 +16,13 @@ def get_int_from_binary(binary_list):
     return result
 
 
-def get_binary_list_from_int(num: int, n_bits):
+def get_binary_aligned_list_from_int(num: int, n_bits):
     bit_list = [int(bit) for bit in bin(num)[2:]]
     for i in range(n_bits - len(bit_list)):
         bit_list.insert(0, 0)
+    return bit_list
+
+
+def get_binary_list_from_int(num: int):
+    bit_list = [int(bit) for bit in bin(num)[2:]]
     return bit_list

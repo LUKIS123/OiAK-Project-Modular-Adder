@@ -37,9 +37,9 @@ class Adder:
         self.input_k_list = None
 
     def calculate(self, input_a, input_b, input_k):
-        self.input_a_list = ArythmeticUtils.get_binary_list_from_int(input_a, self.n_bits)
-        self.input_b_list = ArythmeticUtils.get_binary_list_from_int(input_b, self.n_bits)
-        self.input_k_list = ArythmeticUtils.get_binary_list_from_int(input_k, self.n_bits)
+        self.input_a_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_a, self.n_bits)
+        self.input_b_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_b, self.n_bits)
+        self.input_k_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_k, self.n_bits)
 
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):
@@ -186,41 +186,26 @@ class Adder:
         no_carry_output_list.insert(0, bit1)
         carry_output_list.insert(0, bit1c)
 
-        hashed_cell_index = 0
-        for i in range(0, self.stages, +1):
-            counter = 0
-            for j in range(2 ** i):
-                if counter == 2 ** i or len(final_output_list) == self.n_bits:
-                    break
-                try:
-                    bit_n = self.parallel_adders_list[i][counter].gi_out ^ \
-                            self.n_hashed_enveloped_cell_list[
-                                hashed_cell_index].hi_or_ai_ifk0
+        for i in range(2, self.n_bits, +1):
+            bit_n = self.parallel_adders_list[-1][i - 1].gi_out ^ self.n_hashed_enveloped_cell_list[i].hi_or_ai_ifk0
+            bit_c_n = self.parallel_adders_list[-1][i - 1].gi2_out ^ self.n_hashed_enveloped_cell_list[i].hi_prim
+            if self.c_out == 0:
+                final_output_list.insert(0, bit_n)
+            else:
+                final_output_list.insert(0, bit_c_n)
 
-                    bit_c_n = self.parallel_adders_list[i][counter].gi2_out ^ self.n_hashed_enveloped_cell_list[
-                        hashed_cell_index].hi_prim
+            no_carry_output_list.insert(0, bit_n)
+            carry_output_list.insert(0, bit_c_n)
 
-                    if self.c_out == 0:
-                        final_output_list.insert(0, bit_n)
-                    else:
-                        final_output_list.insert(0, bit_c_n)
-
-                    no_carry_output_list.insert(0, bit_n)
-                    carry_output_list.insert(0, bit_c_n)
-                    hashed_cell_index -= 1
-                    counter += 1
-                except IndexError:
-                    break
-
-        print(f"Vector A: {self.input_a_list}")
-        print(f"Vector B: {self.input_b_list}")
-        print(f"Vector K: {self.input_k_list}")
+        print(f">> Vector A: {self.input_a_list}")
+        print(f">> Vector B: {self.input_b_list}")
+        print(f">> Vector K: {self.input_k_list}")
         print("--------------------------------")
-        print("Output for Carry = 0:")
-        print(f"{no_carry_output_list} ==> {ArythmeticUtils.get_int_from_binary(no_carry_output_list)}")
-        print("Output for carry = 1:")
-        print(f"{carry_output_list} ==> {ArythmeticUtils.get_int_from_binary(carry_output_list)}")
-        print(f"\nCarry = {self.c_out}")
-        print("OUTPUT:")
-        print(f"{final_output_list} ==> {ArythmeticUtils.get_int_from_binary(final_output_list)}")
+        print(">> Output for Carry = 0:")
+        print(f">> {no_carry_output_list} -> {ArythmeticUtils.get_int_from_binary(no_carry_output_list)}")
+        print(">> Output for carry = 1:")
+        print(f">> {carry_output_list} -> {ArythmeticUtils.get_int_from_binary(carry_output_list)}")
+        print(f"\n>> Carry = {self.c_out}")
+        print(">> OUTPUT:")
+        print(f">> {final_output_list} -> {ArythmeticUtils.get_int_from_binary(final_output_list)}")
         print("--------------------------------")
