@@ -40,7 +40,6 @@ from Adder import Adder
 # Enter B: 45
 # Enter K: 20
 
-# NIE DZIALA...
 # input_a = 69
 # input_b = 69
 # input_k = 10
