@@ -1,11 +1,9 @@
 import math
 
-from Utils import ArythmeticUtils
+from Cells.DelayCell import DelayCell
 from Cells.ModuloCellCombo import HashedEnvelopedCellCombo
 from Cells.ParallelPrafixCellCombo import ParallelPrefixCells
-from Cells.DelayCell import DelayCell
-from Cells.PrefixStageCell import ParallelPrefix
-from Cells.PrefixStageCell import ParallelCellType
+from Utils import ArythmeticUtils
 
 
 class Adder:
@@ -78,23 +76,19 @@ class Adder:
                     cell.generate_enveloped_cell_output(0, cell.ai_ifk1)
             else:
                 if k_i == 0:
-                    if self.input_k_list[i - 1] == 0:
-                        cell.generate_enveloped_cell_output(
-                            self.n_hashed_enveloped_cell_list[i - 1].gi_or_bi1_ifk0,
-                            cell.hi_or_ai_ifk0)
+                    if self.input_k_list[self.n_bits - i] == 0:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i - 1].gi_or_bi1_ifk0,
+                                                            cell.hi_or_ai_ifk0)
                     else:
-                        cell.generate_enveloped_cell_output(
-                            self.n_hashed_enveloped_cell_list[i - 1].pi_or_bi1_ifk1,
-                            cell.hi_or_ai_ifk0)
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i - 1].pi_or_bi1_ifk1,
+                                                            cell.hi_or_ai_ifk0)
                 else:
-                    if self.input_k_list[i - 1] == 0:
-                        cell.generate_enveloped_cell_output(
-                            self.n_hashed_enveloped_cell_list[i - 1].gi_or_bi1_ifk0,
-                            cell.ai_ifk1)
+                    if self.input_k_list[self.n_bits - i] == 0:
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i - 1].gi_or_bi1_ifk0,
+                                                            cell.ai_ifk1)
                     else:
-                        cell.generate_enveloped_cell_output(
-                            self.n_hashed_enveloped_cell_list[i - 1].pi_or_bi1_ifk1,
-                            cell.ai_ifk1)
+                        cell.generate_enveloped_cell_output(self.n_hashed_enveloped_cell_list[i - 1].pi_or_bi1_ifk1,
+                                                            cell.ai_ifk1)
 
         # faza obliczen parallel prefix
         for level in range(self.stages):
@@ -124,7 +118,12 @@ class Adder:
 
                 else:
                     above_cell = self.parallel_adders_list[level - 1][index]
-                    previous_above_cell = self.parallel_adders_list[level - 1][previous_above_cell_index]
+                    previous_above_cell = None
+                    try:
+                        previous_above_cell = self.parallel_adders_list[level - 1][previous_above_cell_index]
+                    except IndexError:
+                        pass
+
                     if is_delay_cell:
                         self.parallel_adders_list[level][index].generate_output1(
                             above_cell.pi_out,
@@ -145,12 +144,83 @@ class Adder:
                             above_cell.pi2_out,
                             previous_above_cell.pi2_out
                         )
-                        previous_above_cell_index += 2 ** (level - 1)
-
                     counter += 1
 
                 if counter == parallel_prefix_stage_cluster:
+                    if not is_delay_cell:
+                        previous_above_cell_index += 2 ** (level + 1)
                     is_delay_cell = not is_delay_cell
                     counter = 0
+        # koniec fazy parallel prefix adder
 
-        print()
+        # obliczanie carry
+        if self.input_k_list[0] == 0:
+            last_b_i = self.n_hashed_enveloped_cell_list[-1].gi_or_bi1_ifk0
+        else:
+            last_b_i = self.n_hashed_enveloped_cell_list[-1].pi_or_bi1_ifk1
+
+        if last_b_i == 0:
+            self.c_out = self.parallel_adders_list[-1][-1].gi2_out
+        else:
+            self.c_out = self.parallel_adders_list[-1][-1].gi_out
+
+        # obliczanie wynikow dla carry 0 i 1 oraz wlasciwego wyniku
+        carry_output_list = []
+        no_carry_output_list = []
+        final_output_list = []
+
+        bit0 = self.n_hashed_enveloped_cell_list[0].hi_or_ai_ifk0 if self.c_out == 0 else \
+            self.n_hashed_enveloped_cell_list[0].hi_prim
+
+        no_carry_output_list.insert(0, self.n_hashed_enveloped_cell_list[0].hi_or_ai_ifk0)
+        carry_output_list.insert(0, self.n_hashed_enveloped_cell_list[0].hi_prim)
+        final_output_list.insert(0, bit0)
+
+        bit1 = self.n_hashed_enveloped_cell_list[0].gi_or_bi1_ifk0 ^ self.n_hashed_enveloped_cell_list[1].hi_or_ai_ifk0
+        bit1c = self.n_hashed_enveloped_cell_list[0].gi_prim ^ self.n_hashed_enveloped_cell_list[1].hi_prim
+
+        if self.c_out == 0:
+            final_output_list.insert(0, bit1)
+        else:
+            final_output_list.insert(0, bit1c)
+        no_carry_output_list.insert(0, bit1)
+        carry_output_list.insert(0, bit1c)
+
+        hashed_cell_index = 0
+        for i in range(0, self.stages, +1):
+            counter = 0
+            for j in range(2 ** i):
+                if counter == 2 ** i or len(final_output_list) == self.n_bits:
+                    break
+                try:
+                    bit_n = self.parallel_adders_list[i][counter].gi_out ^ \
+                            self.n_hashed_enveloped_cell_list[
+                                hashed_cell_index].hi_or_ai_ifk0
+
+                    bit_c_n = self.parallel_adders_list[i][counter].gi2_out ^ self.n_hashed_enveloped_cell_list[
+                        hashed_cell_index].hi_prim
+
+                    if self.c_out == 0:
+                        final_output_list.insert(0, bit_n)
+                    else:
+                        final_output_list.insert(0, bit_c_n)
+
+                    no_carry_output_list.insert(0, bit_n)
+                    carry_output_list.insert(0, bit_c_n)
+                    hashed_cell_index -= 1
+                    counter += 1
+                except IndexError:
+                    break
+
+        print(f"Vector A: {self.input_a_list}")
+        print(f"Vector B: {self.input_b_list}")
+        print(f"Vector K: {self.input_k_list}")
+        print("--------------------------------")
+        print("Output for Carry = 0:")
+        print(f"{no_carry_output_list} ==> {ArythmeticUtils.get_int_from_binary(no_carry_output_list)}")
+        print("Output for carry = 1:")
+        print(f"{carry_output_list} ==> {ArythmeticUtils.get_int_from_binary(carry_output_list)}")
+        print(f"\nCarry = {self.c_out}")
+        print("OUTPUT:")
+        print(f"{final_output_list} ==> {ArythmeticUtils.get_int_from_binary(final_output_list)}")
+        print("--------------------------------")

@@ -16,7 +16,6 @@ from GenericAdder import Adder
 # c_out == A+B+K and 128 binarnie dla n=7
 
 while True:
-    # wersja generyczna dla n o potegach dwojki
     n_bits = 7
 
     input_a = int(input("Enter A: "))
