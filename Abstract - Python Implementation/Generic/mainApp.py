@@ -1,5 +1,8 @@
+import sys
+
 from GenericAdder import Adder
 from Utils import ArythmeticUtils
+from Utils import AutomaticTests
 
 # UWAGA -> modulo 2^n - K
 # modulo = 2**n-K
@@ -12,6 +15,11 @@ from Utils import ArythmeticUtils
 # S = A+B           if c_out = 0
 # S = A+B + K       if c_out = 0
 # c_out -> carry z A+B+K
+
+choose_tests = str(input("Automatic Tests? [Y/N]: "))
+if choose_tests.lower() == 'y' or choose_tests.lower() == 'yes':
+    AutomaticTests.test()
+    sys.exit()
 
 while True:
     input_a = int(input("Enter A: "))

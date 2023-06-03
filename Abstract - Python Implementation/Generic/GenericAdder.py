@@ -193,10 +193,10 @@ class Adder:
                 final_output_list.insert(0, bit_n)
             else:
                 final_output_list.insert(0, bit_c_n)
-
             no_carry_output_list.insert(0, bit_n)
             carry_output_list.insert(0, bit_c_n)
 
+        result = ArythmeticUtils.get_int_from_binary(final_output_list)
         print(f">> Vector A: {self.input_a_list}")
         print(f">> Vector B: {self.input_b_list}")
         print(f">> Vector K: {self.input_k_list}")
@@ -207,5 +207,6 @@ class Adder:
         print(f">> {carry_output_list} -> {ArythmeticUtils.get_int_from_binary(carry_output_list)}")
         print(f"\n>> Carry = {self.c_out}")
         print(">> OUTPUT:")
-        print(f">> {final_output_list} -> {ArythmeticUtils.get_int_from_binary(final_output_list)}")
+        print(f">> {final_output_list} -> {result}")
         print("--------------------------------")
+        return result
