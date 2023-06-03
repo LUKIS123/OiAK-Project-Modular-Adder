@@ -3,6 +3,12 @@ from Utils import ArythmeticUtils
 
 
 def test():
+    is_fixed = False
+    choose_fixed_size = str(input("Set fixed adder size (n_bits)? [Y/N]: "))
+    if choose_fixed_size.lower() == 'y' or choose_fixed_size.lower() == 'yes':
+        is_fixed = True
+        input_n_bits = int(input("Enter N_bits: "))
+
     input_a_min = int(input("Enter A min value: "))
     input_a_max = int(input("Enter A max value: "))
     input_b_min = int(input("Enter B min value: "))
@@ -26,7 +32,14 @@ def test():
 
             input_a_list = ArythmeticUtils.get_binary_list_from_int(input_a)
             input_b_list = ArythmeticUtils.get_binary_list_from_int(input_b)
-            n_bits = len(input_a_list) if len(input_a_list) >= len(input_b_list) else len(input_b_list)
+            if is_fixed:
+                n_bits = input_n_bits
+            else:
+                n_bits = len(input_a_list) if len(input_a_list) >= len(input_b_list) else len(input_b_list)
+
+            if ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
+                print("ERROR! Invalid K (MODULO)!!!")
+                break
             print(f"======================== A={input_a}, B={input_b}, N_bits={n_bits} ========================")
 
             expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
