@@ -45,7 +45,7 @@ def test():
                 expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
             else:
                 expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
-            if expected_result > (2 ** n_bits) - 1:
+            if expected_result > (2 ** n_bits) - 1 or input_a >= 2 ** n_bits or input_b >= 2 ** n_bits:
                 print("ERROR: Numbers to big for N_bits given!!!")
                 break
 

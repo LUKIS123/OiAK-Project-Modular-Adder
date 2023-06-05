@@ -14,7 +14,6 @@ class Adder:
     input_k_list = None
     # computational systems
     stages = 0
-    parallel_adders_count = 0
     n_hashed_enveloped_cell_list = []
     parallel_adders_list = []
     # outputs
@@ -22,16 +21,13 @@ class Adder:
 
     def __init__(self, n_bits):
         self.stages = math.ceil(math.log2(n_bits))
-        self.parallel_adders_count = int(n_bits / 2)
         self.n_bits = n_bits
 
     def reset(self, n_bits):
         self.stages = math.ceil(math.log2(n_bits))
-        self.parallel_adders_count = int(n_bits / 2)
         self.n_bits = n_bits
         self.parallel_adders_list.clear()
         self.n_hashed_enveloped_cell_list.clear()
-        self.parallel_adders_count = 0
         self.input_a_list = None
         self.input_b_list = None
         self.input_k_list = None
