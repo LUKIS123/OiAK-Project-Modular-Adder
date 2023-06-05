@@ -44,7 +44,11 @@ while True:
         print("ERROR: Invalid K (MODULO)!!!")
         continue
 
-    print(f">> N_bits = {n_bits}\n>> Expected value = {(input_a + input_b) - ((2 ** n_bits) - input_k)}")
+    if input_a + input_b >= ((2 ** n_bits) - input_k):
+        expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
+    else:
+        expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+    print(f">> N_bits = {n_bits}\n>> Expected value = {expected_result}")
 
     adder = Adder(n_bits)
     print(">> Calculating output...")

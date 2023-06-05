@@ -42,7 +42,11 @@ def test():
                 break
             print(f"======================== A={input_a}, B={input_b}, N_bits={n_bits} ========================")
 
-            expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
+            if input_a + input_b >= ((2 ** n_bits) - input_k):
+                expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
+            else:
+                expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+
             adder = Adder(n_bits)
             result = adder.calculate(input_a, input_b, input_k)
 
