@@ -15,14 +15,14 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module HashedCell(
-	input A,
-	input B,
-	input Ki,
-	output gi,
-   output hi,
-   output pi,
-   output api,
-	output bpi1
+	input wire A,
+	input wire B,
+	input wire Ki,
+	output wire gi,
+   output wire hi,
+   output wire pi,
+   output wire api,
+	output wire bpi1
 );
 	reg gi_or_bi1_ifk0;
    reg ai_ifk1;
@@ -31,7 +31,7 @@ module HashedCell(
 	reg api_out;
 	reg bpi_out;
 	
-	initial begin
+	always @(*) begin
 		gi_or_bi1_ifk0 = A & B;
 		ai_ifk1 = (A & B) | (( ~A ) & ( ~B ));
 		hi_or_ai_ifk0 = A ^ B;
@@ -43,7 +43,7 @@ module HashedCell(
 		else
 			api_out = hi_or_ai_ifk0;
 	end
-	always @(*) begin
+		always @(*) begin
 		if(Ki)
 			bpi_out = pi_or_bi1_ifk1;
 		else
@@ -58,11 +58,11 @@ module HashedCell(
 endmodule
 
 module EnvelopedCell(
-	input A_i,
-	input B_i_prev,
-	output gi_prim,
-   output hi_prim,
-   output pi_prim
+	input wire A_i,
+	input wire B_i_prev,
+	output wire gi_prim,
+   output wire hi_prim,
+   output wire pi_prim
 );
 	assign gi_prim = A_i & B_i_prev;
    assign hi_prim = A_i ^ B_i_prev;
@@ -97,11 +97,55 @@ module DelayCell(
 	buf(gi_prim, gi_prim);
 endmodule
 
-//////////////////////////////////////////////////////////////////////////////////
-module Main;
-	parameter N_bit = 7;
+module HashedCellRow(
+	input wire [WIDTH-1:0] A_vector,
+	input wire [WIDTH-1:0] B_vector,
+	input wire [WIDTH-1:0] K_vector,
+	output wire [WIDTH-1:0] gi_v,
+	output wire [WIDTH-1:0] hi_v,
+	output wire [WIDTH-1:0] pi_v,
+	output wire [WIDTH-1:0] api_v,
+	output wire [WIDTH-1:0] bpi1_v
+);
+	parameter WIDTH = 7;
 	
-	initial begin
-		$display("Hello");
-	end
+	genvar i;
+	generate
+		for(i=0; i<WIDTH; i=i+1) begin: h_caell_gen
+		HashedCell hcell_status(
+			.A(A_vector[i]),
+			.B(B_vector[i]),
+			.Ki(K_vector[i]),
+			.gi(gi_v[i]),
+			.hi(hi_v[i]),
+			.pi(pi_v[i]),
+			.api(api_v[i]),
+			.bpi1(bpi1_v[i])
+		);
+		end
+	endgenerate
+endmodule
+//////////////////////////////////////////////////////////////////////////////////
+module main;
+ parameter N_bits = 7;
+    assign stages = $clog2(N_bits);
+    wire [N_bits-1:0] A_vector = 7'd69;
+    wire [N_bits-1:0] B_vector = 7'd45;
+    wire [N_bits-1:0] K_vector = 7'd20;
+    
+    wire [N_bits-1:0] gi;
+    wire [N_bits-1:0] hi;
+    wire [N_bits-1:0] pi;
+    wire [N_bits-1:0] api;
+    wire [N_bits-1:0] bpi1;
+	 
+	 HashedCellRow #(.WIDTH(N_bits)) hr(.A_vector(A_vector), .B_vector(B_vector), .K_vector(K_vector),
+	 .gi_v(gi), .hi_v(hi), .pi_v(pi), .api_v(api), .bpi1_v(bpi1));
+    
+    initial begin
+        #1 $display("a = %b", A_vector);
+        #1 $display("b = %b", B_vector);
+        #1 $display("k = %b", K_vector);
+        #1 $display("g = %b", gi);
+    end
 endmodule
