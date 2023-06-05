@@ -40,12 +40,16 @@ def test():
             if ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
                 print("ERROR! Invalid K (MODULO)!!!")
                 break
-            print(f"======================== A={input_a}, B={input_b}, N_bits={n_bits} ========================")
 
             if input_a + input_b >= ((2 ** n_bits) - input_k):
                 expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
             else:
                 expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+            if expected_result > (2 ** n_bits) - 1:
+                print("ERROR: Numbers to big for N_bits given!!!")
+                break
+
+            print(f"======================== A={input_a}, B={input_b}, N_bits={n_bits} ========================")
 
             adder = Adder(n_bits)
             result = adder.calculate(input_a, input_b, input_k)

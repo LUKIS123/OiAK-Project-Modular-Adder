@@ -64,10 +64,13 @@ while True:
         expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
     else:
         expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+    if expected_result > (2 ** n_bits) - 1:
+        print("ERROR: Numbers to big for N_bits given!!!")
+        continue
     print(f"Expected value = {expected_result}")
+    print("Calculating output...")
 
     adder = Adder(n_bits)
-    print("Calculating output...")
     adder.calculate(input_a, input_b, input_k)
     adder.reset(n_bits)
 

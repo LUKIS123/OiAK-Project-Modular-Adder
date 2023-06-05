@@ -25,9 +25,10 @@ is_fixed = False
 choose_fixed_size = str(input("Set fixed adder size (n_bits)? [Y/N]: "))
 if choose_fixed_size.lower() == 'y' or choose_fixed_size.lower() == 'yes':
     is_fixed = True
-    input_n_bits = int(input("Enter N_bits: "))
 
 while True:
+    if is_fixed:
+        input_n_bits = int(input("Enter N_bits: "))
     input_a = int(input("Enter A: "))
     input_b = int(input("Enter B: "))
     input_k = int(input("Enter K: "))
@@ -48,10 +49,14 @@ while True:
         expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
     else:
         expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+    if expected_result > (2 ** n_bits) - 1:
+        print("ERROR: Numbers to big for N_bits given!!!")
+        continue
+
     print(f">> N_bits = {n_bits}\n>> Expected value = {expected_result}")
+    print(">> Calculating output...")
 
     adder = Adder(n_bits)
-    print(">> Calculating output...")
     adder.calculate(input_a, input_b, input_k)
     adder.reset(n_bits)
 
