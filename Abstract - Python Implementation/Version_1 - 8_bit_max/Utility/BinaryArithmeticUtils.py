@@ -16,7 +16,7 @@ def get_int_from_binary(binary_list):
     return result
 
 
-def get_binary_list_from_int(num: int, n_bits):
+def get_binary_list_aligned_from_int(num: int, n_bits):
     bit_list = [int(bit) for bit in bin(num)[2:]]
     for i in range(n_bits - len(bit_list)):
         bit_list.insert(0, 0)
@@ -24,8 +24,8 @@ def get_binary_list_from_int(num: int, n_bits):
 
 
 def calculate_mask(input_a: int, input_b: int, n_bits: int):
-    out_list = get_binary_list_from_int(2 ** n_bits, n_bits)
-    ab_list = get_binary_list_from_int(input_a + input_b, n_bits)
+    out_list = get_binary_list_aligned_from_int(2 ** n_bits, n_bits)
+    ab_list = get_binary_list_aligned_from_int(input_a + input_b, n_bits)
     if len(out_list) > len(ab_list):
         for i in range(len(out_list) - len(ab_list)):
             ab_list.insert(0, 0)

@@ -36,9 +36,9 @@ class Adder:
         self.input_k_list = None
 
     def calculate(self, input_a, input_b, input_k):
-        self.input_a_list = BinaryArithmeticUtils.get_binary_list_from_int(input_a, self.n_bits)
-        self.input_b_list = BinaryArithmeticUtils.get_binary_list_from_int(input_b, self.n_bits)
-        self.input_k_list = BinaryArithmeticUtils.get_binary_list_from_int(input_k, self.n_bits)
+        self.input_a_list = BinaryArithmeticUtils.get_binary_list_aligned_from_int(input_a, self.n_bits)
+        self.input_b_list = BinaryArithmeticUtils.get_binary_list_aligned_from_int(input_b, self.n_bits)
+        self.input_k_list = BinaryArithmeticUtils.get_binary_list_aligned_from_int(input_k, self.n_bits)
 
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):

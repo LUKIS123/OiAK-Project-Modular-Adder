@@ -1,4 +1,5 @@
 from Adder import Adder
+from Utility import BinaryArithmeticUtils
 
 # UWAGA >>> modulo 2^n - K
 # n=7
@@ -44,8 +45,8 @@ from Adder import Adder
 # input_b = 69
 # input_k = 10
 
+# TODO: do przetestowania tryb 8 bit
 while True:
-    # TODO: do przetestowania tryb 8 bit
     n_bits = 7
     input_n = int(input("Choose n_bit mode (7 or 8): "))
     if input_n == 7 or input_n == 8:
@@ -54,7 +55,16 @@ while True:
     input_a = int(input("Enter A: "))
     input_b = int(input("Enter B: "))
     input_k = int(input("Enter K: "))
-    print(f"Expected value = {(input_a + input_b) % ((2 ** n_bits) - input_k)}")
+
+    if BinaryArithmeticUtils.get_binary_list_aligned_from_int(input_k, n_bits)[0] != 0:
+        print("ERROR: Invalid K (MODULO)!!!")
+        continue
+
+    if input_a + input_b >= ((2 ** n_bits) - input_k):
+        expected_result = (input_a + input_b) - ((2 ** n_bits) - input_k)
+    else:
+        expected_result = (input_a + input_b) % ((2 ** n_bits) - input_k)
+    print(f"Expected value = {expected_result}")
 
     adder = Adder(n_bits)
     print("Calculating output...")
