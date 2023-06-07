@@ -23,7 +23,7 @@ class Adder:
         self.stages = math.ceil(math.log2(n_bits))
         self.n_bits = n_bits
 
-    def reset(self, n_bits):
+    def reset(self, n_bits: int):
         self.stages = math.ceil(math.log2(n_bits))
         self.n_bits = n_bits
         self.parallel_adders_list.clear()
@@ -32,10 +32,13 @@ class Adder:
         self.input_b_list = None
         self.input_k_list = None
 
-    def calculate(self, input_a, input_b, input_k):
+    def calculate(self, input_a: int, input_b: int, input_k: int, is_second_mode: bool, k_vector_if_second_mode: list):
         self.input_a_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_a, self.n_bits)
         self.input_b_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_b, self.n_bits)
-        self.input_k_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_k, self.n_bits)
+        if is_second_mode:
+            self.input_k_list = k_vector_if_second_mode
+        else:
+            self.input_k_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_k, self.n_bits)
 
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):

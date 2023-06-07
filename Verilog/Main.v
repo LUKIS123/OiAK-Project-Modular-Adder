@@ -138,13 +138,14 @@ module EnvelopedCellRow(
 	generate
 		for(i=0; i<WIDTH; i=i+1) begin: e_cell_gen
           if(i==0) begin
-              EnvelopedCell ecell_status(
+            reg x=0;
+             EnvelopedCell ecell_status(
                   	.A_i(api_vector[i]),
-                	.B_i_prev(0),
+                	.B_i_prev(x),
                   	.gi_prim(gi_prim_vector[i]),
                   	.hi_prim(hi_prim_vector[i]),
                   	.pi_prim(pi_prim_vector[i])
-              );
+             );
             end 
             else begin
               EnvelopedCell ecell_status(

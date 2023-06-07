@@ -100,7 +100,6 @@ class Adder:
             # parallel_prefix_stage_indicator = 2 ** level
             # parallel_prefix_stage_window = 2 ** (level + 1)
             # parallel_prefix_stage_cluster = 2 ** level
-
             for j in range(len(self.parallel_adders_list[level]) - 1, -1, -1):
                 if level == 0 and level0_index > 0:
 
