@@ -1,4 +1,4 @@
-from Utils import ArythmeticUtils as Binary
+from Utils import ArithmeticUtils as Binary
 
 
 class HashedEnvelopedCellCombo:

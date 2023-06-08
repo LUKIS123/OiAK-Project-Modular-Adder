@@ -1,7 +1,7 @@
 import sys
 
 from GenericAdder import Adder
-from Utils import ArythmeticUtils
+from Utils import ArithmeticUtils
 from Utils import AutomaticTests
 
 # UWAGA -> modulo 2^n - K
@@ -45,12 +45,12 @@ while True:
     input_b = int(input("Enter B: "))
     input_k = int(input("Enter K: "))
 
-    input_a_list = ArythmeticUtils.get_binary_list_from_int(input_a)
-    input_b_list = ArythmeticUtils.get_binary_list_from_int(input_b)
-    input_k_list = ArythmeticUtils.get_binary_list_from_int(input_k)
+    input_a_list = ArithmeticUtils.get_binary_list_from_int(input_a)
+    input_b_list = ArithmeticUtils.get_binary_list_from_int(input_b)
+    input_k_list = ArithmeticUtils.get_binary_list_from_int(input_k)
 
     if is_second_mode:
-        input_k_list = ArythmeticUtils.negate_binary_list_(input_k_list)
+        input_k_list = ArithmeticUtils.negate_binary_list_(input_k_list)
 
     # wyznaczanie wartosci n_bitow
     if is_fixed:
@@ -63,7 +63,7 @@ while True:
             input_k_list.insert(0, 0)
 
     else:
-        n_bits = len(input_a_list) if len(input_a_list) >= len(input_b_list) else len(input_b_list)
+        n_bits = len(ArithmeticUtils.get_binary_list_from_int(input_a + input_b))
 
         if is_second_mode:
             if n_bits >= len(input_k_list):
@@ -75,10 +75,10 @@ while True:
                 n_bits = len(input_k_list)
             else:
                 n_bits = len(input_k_list) + 1
-        elif ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
+        elif ArithmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
             n_bits += 1
 
-    if ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
+    if ArithmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
         print("ERROR: Invalid K (MODULO)!!!")
         continue
 

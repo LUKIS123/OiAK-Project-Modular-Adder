@@ -1,5 +1,5 @@
 from GenericAdder import Adder
-from Utils import ArythmeticUtils
+from Utils import ArithmeticUtils
 
 
 def test():
@@ -35,20 +35,18 @@ def test():
             input_b = input_b_min + index_b
             for index_k in range(dist_k):
                 input_k = input_k_min + index_k
+                input_k_list = ArithmeticUtils.get_binary_list_from_int(input_k)
 
-                input_a_list = ArythmeticUtils.get_binary_list_from_int(input_a)
-                input_b_list = ArythmeticUtils.get_binary_list_from_int(input_b)
-                input_k_list = ArythmeticUtils.get_binary_list_from_int(input_k)
                 if is_fixed:
                     n_bits = input_n_bits
                 else:
-                    n_bits = len(input_a_list) if len(input_a_list) >= len(input_b_list) else len(input_b_list)
+                    n_bits = len(ArithmeticUtils.get_binary_list_from_int(input_a + input_b))
                     if len(input_k_list) > n_bits:
                         n_bits = len(input_k_list) + 1
-                    elif ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
+                    elif ArithmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
                         n_bits += 1
 
-                if ArythmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
+                if ArithmeticUtils.get_binary_aligned_list_from_int(input_k, n_bits)[0] != 0:
                     print("ERROR! Invalid K (MODULO)!!!")
                     break
 
