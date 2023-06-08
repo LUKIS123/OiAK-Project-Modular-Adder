@@ -22,11 +22,12 @@ if choose_tests.lower() == 'y' or choose_tests.lower() == 'yes':
     sys.exit()
 
 is_second_mode = False
-choose_fixed_size = str(input("Set modulo (2^n + K) mode? [Y/N], >> default (2^n - K) << : "))
+input_n_bits = 0
+choose_fixed_size = str(input("Set modulo (2^n + K) mode? [Y/N], >>>default (2^n - K)<<< : "))
 if choose_fixed_size.lower() == 'y' or choose_fixed_size.lower() == 'yes':
     is_second_mode = True
 
-# tryb sumatora modulo (2^n + K)
+# tryb sumatora modulo (2^n + K), domyslnie sumator modulo (2^n - K)
 if is_second_mode:
     print(">> Simulating modulo (2^n + K) Adder...")
 else:
@@ -99,9 +100,9 @@ while True:
 
     print(f">> N_bits = {n_bits}\n>> Expected value = {expected_result}")
     if is_second_mode:
-        print(f">> MOD={((2 ** (n_bits - 1)) + input_k)}, Calculating output...")
+        print(f">> MODULO={((2 ** (n_bits - 1)) + input_k)}, Calculating output...")
     else:
-        print(f">> MOD={((2 ** n_bits) - input_k)}, Calculating output...")
+        print(f">> MODULO={((2 ** n_bits) - input_k)}, Calculating output...")
 
     # dla modulo (2^n + K) calculate() przyjmuje zanegowany vektor K z 0 na pierwszej pozycji
     # w tym przypadku uklad musi skladac sie modulow dla n+1

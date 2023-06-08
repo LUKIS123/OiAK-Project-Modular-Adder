@@ -19,7 +19,7 @@ class Adder:
     # outputs
     c_out = 0
 
-    def __init__(self, n_bits):
+    def __init__(self, n_bits: int):
         self.stages = math.ceil(math.log2(n_bits))
         self.n_bits = n_bits
 
