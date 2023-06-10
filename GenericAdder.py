@@ -3,7 +3,7 @@ import math
 from Cells.DelayCell import DelayCell
 from Cells.ModuloCellCombo import HashedEnvelopedCellCombo
 from Cells.ParallelPrafixCellCombo import ParallelPrefixCells
-from Utils import ArythmeticUtils
+from Utils import ArithmeticUtils
 
 
 class Adder:
@@ -19,11 +19,11 @@ class Adder:
     # outputs
     c_out = 0
 
-    def __init__(self, n_bits):
+    def __init__(self, n_bits: int):
         self.stages = math.ceil(math.log2(n_bits))
         self.n_bits = n_bits
 
-    def reset(self, n_bits):
+    def reset(self, n_bits: int):
         self.stages = math.ceil(math.log2(n_bits))
         self.n_bits = n_bits
         self.parallel_adders_list.clear()
@@ -32,10 +32,13 @@ class Adder:
         self.input_b_list = None
         self.input_k_list = None
 
-    def calculate(self, input_a, input_b, input_k):
-        self.input_a_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_a, self.n_bits)
-        self.input_b_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_b, self.n_bits)
-        self.input_k_list = ArythmeticUtils.get_binary_aligned_list_from_int(input_k, self.n_bits)
+    def calculate(self, input_a: int, input_b: int, input_k: int, is_second_mode: bool, k_vector_if_second_mode: list):
+        self.input_a_list = ArithmeticUtils.get_binary_aligned_list_from_int(input_a, self.n_bits)
+        self.input_b_list = ArithmeticUtils.get_binary_aligned_list_from_int(input_b, self.n_bits)
+        if is_second_mode:
+            self.input_k_list = k_vector_if_second_mode
+        else:
+            self.input_k_list = ArithmeticUtils.get_binary_aligned_list_from_int(input_k, self.n_bits)
 
         # inicjowanie hashed cells oraz enveloped cells do obliczen modulo
         for i in range(self.n_bits):
@@ -192,15 +195,15 @@ class Adder:
             no_carry_output_list.insert(0, bit_n)
             carry_output_list.insert(0, bit_c_n)
 
-        result = ArythmeticUtils.get_int_from_binary(final_output_list)
+        result = ArithmeticUtils.get_int_from_binary(final_output_list)
         print(f">> Vector A: {self.input_a_list}")
         print(f">> Vector B: {self.input_b_list}")
         print(f">> Vector K: {self.input_k_list}")
         print("--------------------------------")
         print(">> Output for Carry = 0:")
-        print(f">> {no_carry_output_list} -> {ArythmeticUtils.get_int_from_binary(no_carry_output_list)}")
+        print(f">> {no_carry_output_list} -> {ArithmeticUtils.get_int_from_binary(no_carry_output_list)}")
         print(">> Output for carry = 1:")
-        print(f">> {carry_output_list} -> {ArythmeticUtils.get_int_from_binary(carry_output_list)}")
+        print(f">> {carry_output_list} -> {ArithmeticUtils.get_int_from_binary(carry_output_list)}")
         print(f"\n>> Carry = {self.c_out}")
         print(">> OUTPUT:")
         print(f">> {final_output_list} -> {result}")
