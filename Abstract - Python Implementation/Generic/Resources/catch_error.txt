@@ -1,1 +1,0 @@
-Automatic Tests arguments: A_min=100, A_max=120, B_min=50, B_max=60, K=10
