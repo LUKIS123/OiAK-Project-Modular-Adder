@@ -223,11 +223,11 @@ module generateResult(
 endmodule
 
 module main;
- parameter N_bits = 7;
+ parameter N_bits = 12;
     assign stages = $clog2(N_bits);
-    wire [N_bits-1:0] A_vector = 7'd21;
-    wire [N_bits-1:0] B_vector = 7'd37;
-    wire [N_bits-1:0] K_vector = 7'd59;
+    wire [N_bits-1:0] A_vector = 12'd420;
+    wire [N_bits-1:0] B_vector = 12'd4040;
+    wire [N_bits-1:0] K_vector = 12'd59;
     
     wire [N_bits-1:0] S_vector;
     
@@ -267,9 +267,9 @@ module main;
     );
     
     initial begin
-        #1 $display("a = %b", A_vector);
-        #1 $display("b = %b", B_vector);
-        #1 $display("k = %b", K_vector);
+        #1 $display("a = %b, %d", A_vector, A_vector);
+        #1 $display("b = %b, %d", B_vector, B_vector);
+        #1 $display("k = %b, %d", K_vector, K_vector);
 		#1 $display("==========================================");
         //#1 $display("g = %b", gi);
 		//#1 $display("h = %b", hi);
@@ -291,7 +291,7 @@ module main;
 		//#1 $display("og  = %b", og);
 		//#1 $display("og' = %b", ogp);
 		//#1 $display("==========================================");
-		#1 $display("s = %b", S_vector);
+		#1 $display("s = %b, %d", S_vector, S_vector);
 
     end
 endmodule
